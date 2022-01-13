@@ -1,0 +1,111 @@
+#include "mbed.h"
+//ピン宣言
+DigitalOut stbyAB(PA_11);
+DigitalOut stbyCD(PC_9);
+
+DigitalIn rigthbutton_up(PC_10, PullDown);//ボタン。PullUp:押してなければ0,押したら1.
+DigitalIn rigthbutton_down(PC_12, PullDown);//ボタン。PullUp:押してなければ0,押したら1.
+PwmOut right_motorrun(PA_8); 
+DigitalOut right_motorF(PA_9); //右モーター前移動。high 回転 low逆回転
+DigitalOut right_motorB(PA_10);//右モーター後ろ移動。low 逆回転　high 回転
+
+DigitalIn leftbutton_up(PA_13, PullDown);
+DigitalIn leftbutton_down(PA_14, PullDown);
+PwmOut left_motorrun(PA_5);
+DigitalOut left_motorF(PB_3); //左モーター前移動。high 回転 low逆回転
+DigitalOut left_motorB(PB_10); //low 逆回転　high 回転
+
+DigitalIn rightbutton_right(PC_11, PullDown);
+DigitalIn rightbutton_left(PD_2, PullDown);
+PwmOut arm_motorSPEED(PA_6);
+DigitalOut arm_motorUP(PC_7);//high 回転 low逆回転
+DigitalOut arm_motorDOWN(PC_8); //high 逆回転　low 回転
+
+DigitalIn leftbutton_left(PB_0, PullDown);//ボタン。PullUp:押してなければ0,押したら1.
+DigitalIn leftbutton_right(PC_1, PullDown);//ボタン。PullUp:押してなければ0,押したら1.
+PwmOut hand_motorSPEED(PB_6);
+DigitalOut hand_motoropen(PB_7); //high 回転 low逆回転
+DigitalOut hand_motorclose(PB_8); //high 逆回転　low 回転
+
+int main(){
+    stbyAB =1;
+    stbyCD =1;
+while(1){
+  if(rigthbutton_up.read()==1){ //ボタンが押された時
+    //コントローラーで走行のボタン(右上)が押された場合        
+        //wait(0.05); //チャタリングをスルーする場合はもう一回if文書く必要あり。
+        right_motorrun = 0.3;
+        right_motorF=1;
+        right_motorB=0;
+        //wait(0.05);
+        }
+    else if(rigthbutton_down.read()==1){
+        //wait(0.05); //チャタリングをスルーする
+        right_motorrun = 0.3;
+        right_motorF=0;
+        right_motorB=1;
+        //wait(3);
+        }
+    else{
+        right_motorrun = 0;
+        }
+        
+  if(leftbutton_up.read()==1){ //ボタンが押された時
+    //コントローラーで走行のボタン(左上)が押された場合    
+        //wait(0.05); //チャタリングをスルーする    
+        left_motorrun = 0.3;
+        left_motorF=1;
+        left_motorB=0;
+        //wait(3);
+        }
+  else if(leftbutton_down.read()==1){
+       //wait(0.05); //チャタリングをスルーする
+        left_motorrun = 0.3;
+        left_motorF=0;
+        left_motorB=1;
+        //wait(3);
+        }
+    else{
+        left_motorrun = 0;
+        }
+        
+//アームの上げ下げ
+   if(rightbutton_right.read()==1){//boタンが押された時
+    //コントローラーでアームのボタン(右右)が押された場合        
+        //wait(0.05); //チャタリングをスルーする
+        arm_motorSPEED = 0.3;
+        arm_motorUP=1;
+        arm_motorDOWN=0;
+        //wait(3);
+        }
+    else if(rightbutton_left.read()==1){
+        //wait(0.05); //チャタリングをスルーする
+        arm_motorSPEED = 0.3;
+        arm_motorUP=0;
+        arm_motorDOWN=1;
+        //wait(3);
+        }
+    else{
+        arm_motorSPEED = 0;
+        }
+
+//アームの開け閉め
+    if(leftbutton_left.read()==1){//ボタンが押された時
+    //wait(0.05); //チャタリングをスルーする
+        hand_motorSPEED = 0.3;
+        hand_motoropen=1;
+        hand_motorclose=0;
+        //wait(3);
+        }
+    else if(leftbutton_right.read()==1){
+        //wait(0.05); //チャタリングをスルーする
+        hand_motorSPEED = 0.3;
+        hand_motoropen=0;
+        hand_motorclose=1;
+        //wait(3);
+        }
+    else{
+        hand_motorSPEED = 0;
+        }
+    }
+}
